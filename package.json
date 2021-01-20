@@ -1,0 +1,17 @@
+{
+  "name": "openrice-scrapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "firebase": "^7.24.0",
+    "firebase-admin": "^9.4.2",
+    "puppeteer": "^5.5.0"
+  }
+}

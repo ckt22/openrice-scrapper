@@ -7,7 +7,7 @@ var serviceAccount = require("./coach-ai-firebase-adminsdk-89vdc-c96b5d4a7b.json
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  // databaseURL: "https://coach-ai.firebaseio.com" // for writing to realtime database.
+  databaseURL: "https://coach-ai.firebaseio.com" // for writing to realtime database.
 //   databaseURL: "https://restaurant-menu-scrapper.firebaseio.com"
 });
 

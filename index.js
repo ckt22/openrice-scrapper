@@ -7,8 +7,8 @@ var serviceAccount = require("./coach-ai-firebase-adminsdk-89vdc-c96b5d4a7b.json
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://coach-ai.firebaseio.com" // for writing to realtime database.
-//   databaseURL: "https://restaurant-menu-scrapper.firebaseio.com"
+  // databaseURL:  // for writing to realtime database.
+  databaseURL: process.env.OPENRICE_SCRAPPER_URL
 });
 
 
@@ -16,10 +16,10 @@ admin.initializeApp({
 (async () => {
     try {
         // Scrape
-        await scrapRestaurants();
+        // await scrapRestaurants();
 
         // Nutrition
-        // let restaurants = await addNutritionInfo();
+        let restaurants = await addNutritionInfo();
 
         // Firestore testing
         // let restaurants = await getStoredDataInFirestore();
@@ -37,7 +37,7 @@ async function scrapRestaurants() {
         await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
         await page.setDefaultNavigationTimeout(0);
         for(pageNumber=1; pageNumber<=17; pageNumber++) {
-            let startingUrl = `https://www.openrice.com/en/hongkong/restaurants/district/tsuen-wan?page=${pageNumber}`
+            let startingUrl = `https://www.openrice.com/en/hongkong/restaurants/district/central?page=${pageNumber}`
             // let startingUrl = `https://www.openrice.com/en/hongkong/restaurants?page=${pageNumber}`
             await page.goto(startingUrl, {
                 waitUntil: 'networkidle2'
@@ -116,8 +116,8 @@ async function getMenus(page, restaurants) {
 // fetch restaurants from database, then add nutrition info.
 async function addNutritionInfo() {
     try {
-        let restaurants = await getStoredRestaurantsInFirebase();
-        // let restaurants = await getStoredDataInFirestore();
+        // let restaurants = await getStoredRestaurantsInFirebase();
+        let restaurants = await getStoredDataInFirestore();
         let count = 0;
     
         for (i=0; i<restaurants.length; i++) {
@@ -129,8 +129,8 @@ async function addNutritionInfo() {
                     let menuDataWithNutritionInfo = [];
                     for (var menuItem of restaurants[i].menuData) {
                         let nutritionValues = await axios.post(`https://api.nutritionix.com/v1_1/search`, {
-                            "appId": "523f42f5", // 43bf0f71 / 523f42f5
-                            "appKey": "87798566c7efbe667ee87814d13b1a2d", //  2c604e35de89d5238e30136c1dc9d077 / 87798566c7efbe667ee87814d13b1a2d
+                            "appId": process.env.NUTRITIONIX_APP_ID,
+                            "appKey": "2c604e35de89d5238e30136c1dc9d077",
                             "query": menuItem,
                             "fields": [
                                 "item_name",
